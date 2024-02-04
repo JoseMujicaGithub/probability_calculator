@@ -1,0 +1,1 @@
+This is my version of the freeCodeCamp probability calculator, in this project the user can create a virtual box filled with 5 different color balls, this mixt of balls can be specified by the user or made randomly by the computer, the program calculates a probability to get a specific random combination of balls out of the box.
