@@ -23,10 +23,12 @@ class Hat:
 
 def experiment(hat, expected_balls, num_balls_drawn, num_experiments):
   succesfull_draw = 0
-
+  
   drawed = []
+  global j
   for j in range(num_experiments):
-    expected_balls_copy = copy.deepcopy(expected_balls)
+    global expected_balls_copy 
+    expected_balls_copy= copy.deepcopy(expected_balls)
     hat_copy = copy.deepcopy(hat)
     drawed = hat_copy.draw(num_balls_drawn)
 
@@ -44,8 +46,8 @@ def experiment(hat, expected_balls, num_balls_drawn, num_experiments):
         break
     if allMatch:
       succesfull_draw += 1
-
-  return succesfull_draw / num_experiments
+  probability_=succesfull_draw / num_experiments
+  return probability_
 
 print("This progran calculates the probability of getting a certain combination of color balls")
 print("from a box full of ball of 5 diferent colors")
@@ -87,6 +89,8 @@ max_balls=validate_input_num("Enter how many balls are in the box: ")
 #max_balls=45
 max_balls_copy1=max_balls
 max_balls_copy2=max_balls
+colors_list_copy_1=colors_list
+colors_list_copy_2=colors_list
 
 '''
 colors_list_sample=[]
@@ -128,9 +132,9 @@ print(f'user dict: \n {colors_dict}')
 random_dict={}
 random_color=[]
 while max_balls_copy2>0:
-  if len(colors_list)>1:
-    random_color.append(colors_list.pop(random.randint(0,(len(colors_list)-1))))
-    print(f'max balls copy2: {max_balls_copy2}')
+  if len(colors_list_copy_2)>1:
+    random_color.append(colors_list_copy_2.pop(random.randint(0,(len(colors_list_copy_2)-1))))
+    #print(f'max balls copy2: {max_balls_copy2}')
   for element in random_color:
     try:
       if (random_dict[element]):
@@ -138,95 +142,69 @@ while max_balls_copy2>0:
     except:
       if len(colors_list)>1:
         random_dict[element]=random.randint(0,max_balls_copy2)
+        max_balls_copy2-=random_dict.get(element)
       else:
         random_dict[element]=max_balls_copy2
         if sum(random_dict.values())>max_balls:
-          colors_list.append(element)
+          colors_list_copy_2.append(element)
           del random_dict[element]
         else:
           max_balls_copy2-=random_dict[element]
-          print(f'max balls copy2 {max_balls_copy2}\n len de color_list: {len(colors_list)}')
-        if len(colors_list)==1:
-          random_color.append(colors_list.pop(0))
+          #print(f'max balls copy2 {max_balls_copy2}\n len de color_list: {len(colors_list_copy_2)}')
+        if len(colors_list_copy_2)==1:
+          random_color.append(colors_list_copy_2.pop(0))
   for element in random_color:
-    if random_dict[element]==0:
+    if random_dict.get(element)==0:
       del random_dict[element]
 
-'''
-random_dict={}
-random_color=[]
-while max_balls_copy2>0:
-  random_color.append(colors_list.pop(random.randint(0,(len(colors_list)))))
-  print(f'max balls copy2 {max_balls_copy2}')
-  for element in random_color:
-    try:
-      if (random_dict[element]):
-        skip=None
-    except:
-      random_dict[element]=random.randint(0,max_balls)
-      if sum(random_dict.values())>max_balls:
-         colors_list.append(element)
-         del random_dict[element]
-      else:
-        max_balls_copy2-=random_dict[element]
-        print(f'max balls copy2 {max_balls_copy2}\n len de color_list: {len(colors_list)}')
-'''
-'''
-  if (len(colors_list)==0) and (max_balls_copy2)>0:
-      while max_balls_copy2>0:
-        for element in random_color:
-          print(f'random dict\n{random_dict}')
-          try:
-            random_dict[element]=random.randint(0,max_balls_copy2)
-            max_balls_copy2-=random_dict[element]
-          except:
-             print('==Error==')
-'''
+print(random_dict)
+
 #colors_list=["Red",'Green','Blue',"Black","Pink"]
-'''
+
 try:
    red=random_dict["Red"]
 except:
-   red=None
+   red=0
 try:
    green=random_dict['Green']
 except:
-   green=None
+   green=0
 try:
    blue=random_dict['Blue']
 except:
-   blue=None
+   blue=0
 try:
    black=random_dict["Black"]
 except:
-   black=None
+   black=0
 try:
    pink=random_dict["Pink"]
 except:
-   pink=None
-'''   
+   pink=0
 
-print(f'random dict: \n {random_dict}')
-'''
-colors_list=["Red",'Green','Blue',"Black","Pink"]
+print(f'red={red} green={green} blue={blue} black={black} pink={pink}')
 
-red=random_dict[colors_list[0]]
-green=random_dict[colors_list[1]]
-print(red,green)
+box=Hat(Red=red,Green=green,Blue=blue,Black=black,Pink=pink)
+#print(f'this is the box: {box}') ===========passed===========
 
-#box=Hat(Red=10,Green=8,Blue=7,Black=9,Pink=11)
-#print(f'this is the box: {box}')
-'''
-#colors_list=["Red",'Green','Blue',"Black","Pink"]
-'''
-box=Hat(red,green,blue,black,pink)
 while True:
-   num_balls_to_drawn=validate_input_num(f'Enter how many balls you want to drwa from the box of {max_balls}: ')
-   if max_balls >= num_balls_to_drawn:
-      break
-   else:
-      print(f"The number of balls to drwa must be less or equal to the amount of balls in the box ({max_balls})")
+  num_balls_to_drawn=validate_input_num(f'Enter how many balls you want to drwa from the box of {max_balls}: ')
+  draw=box.draw(num_balls_to_drawn)
+  if max_balls >= num_balls_to_drawn:
+    break
+  else:
+    print(f"The number of balls to draw must be less or equal to the amount of balls in the box ({max_balls})")
 experiments=validate_input_num('Enter how many experiments you wish to do: ')
+#{"Red": 2,"Green": 3}
+'''
+probability = prob_calculator.experiment(hat=hat,
+                                             expected_balls={
+                                                 "yellow": 2,
+                                                 "blue": 3,
+                                                 "test": 1
+                                             },
+                                             num_balls_drawn=20,
+                                             num_experiments=10000)
+'''
 probability=experiment(hat=box,expected_balls=random_dict,num_balls_drawn=num_balls_to_drawn,num_experiments=experiments)
 print(probability)
-'''
